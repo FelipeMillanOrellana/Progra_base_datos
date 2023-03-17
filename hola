@@ -1,0 +1,19 @@
+--1
+VAR x_ID NUMBER;
+EXEC : X_ID :=10;
+
+DECLARE 
+    V_NOMBRECOMPLETO VARCHAR2(250);
+    V_ESTADO NUMBER(1);
+BEGIN
+    SELECT NOMBRE||' '||APELLIDO, ESTADO
+    INTO V_NOMBRECOMPLETO,        V_ESTADO
+    FROM PERSONA
+    WHERE ID = :X_ID;
+
+    DBMS_OUTPUT:PUT_LINE('NOMBRE COMPLO: '|| V_NOMBRECOMPLETO);
+    DBMS_OUTPUT_PUT_LINE('ESTADO: '|| V_ESTADO)
+
+END
+-------------------------------------------------------------------
+
