@@ -16,4 +16,11 @@ BEGIN
 
 END
 -------------------------------------------------------------------
-
+DECLARE
+    V_NOMBRECOMPLETO VARCHAR2(250);
+    V_RUT NUMBER(9);
+    
+BEGIN
+    SELECT 
+    * 
+    FROM empleado 
