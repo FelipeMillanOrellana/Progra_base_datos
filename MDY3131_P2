@@ -1,18 +1,31 @@
-SELECT 
-    Extract (year from sysdate) AS "anno_proceso",
-    E.NUMRUN_EMP,
-    E.DVRUN_EMP,
-    E.PNOMBRE_EMP||' '||SNOMBRE_EMP||' '||APPATERNO_EMP||' '||APMATERNO_EMP,
-    E.SUELDO_EMP,
-    Trunc(sueldo_base/100000) AS "porc_movil_normal",
-    CASE C.NOMBRE_COMUNA
-        WHEN 'María Pinto'  THEN 20000
-        When 'Curacaví' THEN 25000
-        When 'Talagante' THEN 30000
-        When 'El Monte' THEN 35000
-        When 'Buin' THEN 40000
-        else = 0
-    END AS "VALOR_MOVIL_ADICIONAL"
-FROM EMPLEADO E, COMUNA C
-WHERE E.ID_COMUNA=C.ID_COMUNA;
+DECLARE
+    v_anio                  NUMBER(9999);
+    v_NUMRUN                NUMBER(8);
+    v_DVRUN                 CHAR(1);
+    v_nombrecompleto        varchar2(200);
+    v_SUELDO                EMPLEADO.SUELDO_BASE%TYPE;
+    v_PORCMOVIL             EMPLEADO.SUELDO_BASE%TYPE;
+    v_VALORMOVILADICIONAL   EMPLEADO.SUELDO_BASE%TYPE;
+    v_                      EMPLEADO.SUELDO_BASE%TYPE;
+    v_TOTAL                 EMPLEADO.SUELDO_BASE%TYPE;
+BEGIN
+    SELECT 
+        Extract (YEAR FROM SYSDAETE) AS "anno_proceso",
+        E.NUMRUN_EMP,
+        E.DVRUN_EMP,
+        E.PNOMBRE_EMP||' '||SNOMBRE_EMP||' '||APPATERNO_EMP||' '||APMATERNO_EMP,
+        E.SUELDO_EMP,
+        Trunc(sueldo_base/100000) AS "porc_movil_normal",
+        CASE C.NOMBRE_COMUNA
+            WHEN 'María Pinto'  THEN 20000
+            When 'Curacaví' THEN 25000
+            When 'Talagante' THEN 30000
+            When 'El Monte' THEN 35000
+            When 'Buin' THEN 40000
+            else = 0
+        END AS "VALOR_MOVIL_ADICIONAL"
+    FROM EMPLEADO E, COMUNA C
+    WHERE E.ID_COMUNA=C.ID_COMUNA;
+    COMMIT;
     
+END;
