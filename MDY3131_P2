@@ -1,1 +1,18 @@
-
+SELECT 
+    Extract (year from sysdate) AS "anno_proceso",
+    E.NUMRUN_EMP,
+    E.DVRUN_EMP,
+    E.PNOMBRE_EMP||' '||SNOMBRE_EMP||' '||APPATERNO_EMP||' '||APMATERNO_EMP
+    E.SUELDO_EMP,
+    Trun(sueldo_base/100000) AS "porc_movil_normal",
+    C.nombre_Comuna
+    CASE C.NOMBRE_COMUNA
+        WHEN 'María Pinto'  THEN 20000
+        When 'Curacaví' THEN 25000
+        When 'Talagante' THEN 30000
+        When 'El Monte' THEN 35000
+        When 'Buin' THEN 40000
+        else = 0
+    END AS "VALOR_MOVIL_ADICIONAL"
+FROM EMPLEADO E, COMUNA C
+WHERE E;
