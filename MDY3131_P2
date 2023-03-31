@@ -28,4 +28,96 @@ BEGIN
     WHERE E.ID_COMUNA=C.ID_COMUNA;
     COMMIT;
 END;
+
+-------------------------------------------------------------------------------
+
+VAR rut NUMBER;
+EXEC : rut := '12648200'
+VAR dvrut CHAR;
+VAR :dvrut := '3';
+DECLARE
+    v_mesanio number(6);
+    v_rut empleado.numrut_emp%type;
+    v_dv empleado.dvrun_emp%type;
+    v_nombrecompleto varchar2(150);
+    v_pnombe empleado.pnmbre_emp%type;
+    v_appaterno empleado.appaterno_emp%type;
+    v_sueldobase empleado.sueldo_base_emp%type;
+    v_antiguedad nuber(2);
+    v_nacimiento number(4);
+    v_estdocivil estado_civil.nombre_estado_civil%type;
+    v_comuna comuna.nombre_comuna%type;
+    
+    v_usuario usuario_clve.nombre_usuario%type;
+    v_pass usuario_clave.clave_usuario%type;
+    
+    v_auxAp varchar2(2);
+BEGIN
+    SELECT
+        TO_CHAR(sysdate,'MMyyyy') as "mes_annio",
+        numrun_emp,
+        dvrun_emp,
+        pnombre_emp||' '||snombre_emp||' '||appaterno_emp||' '||apmaterno_emp as "nombre completo",
+        sueldo_base,
+        trunc((sysdate-fecha_contrato)/365) as "antiguedad",
+        EXTRAC(YEAR FROM fecha_nac) + 2 as "annio_nacimiento",
+        ec.nombre_estado_civil,
+        c.nombre_comuna
+    INTO
+        v_mesanio, 
+        v_rut,
+        v_dv, 
+        v_nombrecompleto, 
+        v_pnombe, 
+        v_appaterno, 
+        v_sueldobase, 
+        v_antiguedad, 
+        v_nacimiento, 
+        v_estdocivil, 
+        v_comuna 
+    FROM empleado e, estado_civil ec, comuna c
+    WHERE
+        e.id_estado_civil=ec.id_estado_civil
+        AND e.id_comuna=c.id_comuna
+        
+        AND numrun_emp = :rut
+        AND dvrun_emp = :dvrut;
+        
+    v_usuario := substr(v_pnombre,0,3) || 
+                LENGTH(v_pnombre) ||
+                '*' ||
+                substr(v_sueldobase,-1,1) ||
+                v_dv ||
+                v_ntiguedad;
+    IF v_antiguedad<10
+    THEN
+        v_usuario := v_usuario || 'x';
+    END;
+    
+    v_pass := substr(v_rut,3,1) ||
+                v_nacimiento ||
+                substr(v_sueldobase,-3,3) -1 ||
+    v_auxAp := (
+        CASE 
+            WHEN v_estadocivil='CASADO' or v_estadocivil='UNION CIVIL'
+            THEN 
+                v_auxAp := substr(v_appaterno,0,2);
+            WHEN v_estadocivil='DIVORCIADO' or v_estadocivil='SOLTERO'
+            THEN
+                v_auxAp := substr(v_appaterno,0)||substr(appaterno,-1);
+            WHEN v_estadocivil='VIUDO'
+            THEN
+                v_auxAp := substr(v_appaterno,-3,2);
+            ELSE
+            THEN
+                v_auxAp := substr(v_appaterno,-2,2);
+    END
+    );
+v_pass := v_pass || v_auxAp
+|| v_mesanio
+|| substr(v_comuna,1)
+
+INSERT INTO USUARIO_CLAVE
+VALUES(
+
     
